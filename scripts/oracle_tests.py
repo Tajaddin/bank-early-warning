@@ -99,7 +99,7 @@ def main() -> int:
     a.out.write_text(xml + "\n", encoding="utf-8", newline="\n")
     root = ET.fromstring(xml)  # noqa: S314 (utPLSQL's own report from our container, not outside input)
     tests, failures, errors = (int(root.get(k, 0)) for k in ("tests", "failures", "errors"))
-    print(f"utPLSQL: {tests} tests, {failures} failures, {errors} errors ({a.out.relative_to(ROOT)})")
+    print(f"utPLSQL: {tests} tests, {failures} failures, {errors} errors ({a.out})")
     return 0 if tests and not failures and not errors else 1
 
 
