@@ -11,8 +11,8 @@ that happened before anyone could see the data, or by being tested on the same c
 
 1. **A label a supervisor could act on.** Call Report data for a quarter end becomes public about 60 days later.
    A bank-quarter is positive when the bank failed within 365 days *after* that publication date. A bank-quarter
-   whose bank had already failed by the publication date is dropped, not counted as an easy hit: 497 of the 502
-   failures of 2008-2013 came within 90 days of the bank's last filing, so without this rule most positives would
+   whose bank had already failed by the publication date is dropped, not counted as an easy hit: 499 of the 502
+   failures of 2008-2013 came within one quarter (91 days) of the bank's last filing (`reports/data-checks.json`), so without this rule most positives would
    be filings no one could have used.
 2. **Out of time, with a gap.** Train on report dates 2007-12-31 to 2009-12-31 (labels reach into early 2011);
    test on 2011-03-31 to 2012-12-31. Report dates in 2010 are used by neither, so no training label overlaps a

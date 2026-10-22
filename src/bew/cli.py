@@ -36,3 +36,18 @@ def fetch(
     typer.echo(
         json.dumps({k: {"rows": v["rows"], "sha256": v["sha256"][:12]} for k, v in manifest["files"].items()}, indent=2)
     )
+
+
+@app.command("check")
+def check_data(
+    raw: Annotated[Path, typer.Option()] = RAW, out: Annotated[Path, typer.Option()] = Path("reports/data-checks.json")
+) -> None:
+    """Data checks on the fetched files; exits 1 if a key repeats or a failure has no filings."""
+    from bew.checks import check
+
+    result = check(raw)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8", newline="\n")
+    typer.echo(json.dumps(result, indent=2))
+    if not all(result["passed"].values()):
+        raise typer.Exit(1)
