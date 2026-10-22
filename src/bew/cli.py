@@ -36,4 +36,3 @@ def fetch(
     typer.echo(
         json.dumps({k: {"rows": v["rows"], "sha256": v["sha256"][:12]} for k, v in manifest["files"].items()}, indent=2)
     )
-
