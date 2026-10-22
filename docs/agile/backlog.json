@@ -1,0 +1,36 @@
+{
+  "labels": [
+    {"name": "story", "color": "1d76db", "description": "User-visible capability with acceptance criteria"},
+    {"name": "chore", "color": "c5def5", "description": "Tooling, docs or infrastructure"},
+    {"name": "bug", "color": "d73a4a", "description": "Something that does not work as specified"},
+    {"name": "area:data", "color": "0e8a16", "description": "FDIC data and its checks"},
+    {"name": "area:r", "color": "276dc3", "description": "The R package and the model"},
+    {"name": "area:sql", "color": "5319e7", "description": "MySQL, SQL Server and Oracle"},
+    {"name": "area:infra", "color": "bfd4f2", "description": "Containers and CI"},
+    {"name": "area:docs", "color": "d4c5f9", "description": "README, ADRs, model card"},
+    {"name": "points:1", "color": "ededed", "description": "Story points"},
+    {"name": "points:2", "color": "ededed", "description": "Story points"},
+    {"name": "points:3", "color": "ededed", "description": "Story points"},
+    {"name": "points:5", "color": "ededed", "description": "Story points"},
+    {"name": "blocked:account", "color": "000000", "description": "Needs an account only the owner can create"}
+  ],
+  "milestones": [
+    {"title": "Sprint 1 - Data and the model in R", "due": "2026-10-23", "description": "Goal: FDIC Call Report data fetched and checked, an R package that builds features and labels, fits the early-warning model on 2007-2009 and evaluates it out of time on 2011-2012 against a one-ratio baseline."},
+    {"title": "Sprint 2 - The model in three SQL engines", "due": "2026-10-24", "description": "Goal: MySQL, SQL Server and Oracle each compute the features and scores with their own SQL, tested in the engine where it has a framework, and proven equal to R bank by bank."},
+    {"title": "Sprint 3 - CI and release", "due": "2026-10-25", "description": "Goal: CI runs R CMD check and all three engines, the results and their limits are documented, release v1.0.0."},
+    {"title": "Backlog", "description": "Work that needs an account only the owner can create (labelled blocked:account)."}
+  ],
+  "issues": [
+    {"title": "Scaffold: Python and R packages, generated local passwords, CI with lint, types, tests and a secret scan", "milestone": "Sprint 1 - Data and the model in R", "labels": ["chore", "area:infra", "points:2"], "body": "As the owner, I want a project that checks itself on every push.\n\n**Acceptance criteria**\n- [ ] Python package with ruff, mypy, pytest; an R package skeleton\n- [ ] database passwords generated into a git-ignored .env, never typed or committed\n- [ ] CI: lint, types, unit tests, gitleaks, pip-audit"},
+    {"title": "FDIC Call Report data: financials 2006-2013, failures, institutions, with a manifest and checks", "milestone": "Sprint 1 - Data and the model in R", "labels": ["story", "area:data", "points:3"], "body": "As an analyst, I want the exact data every number came from.\n\n**Acceptance criteria**\n- [ ] every page fetched, row counts equal to the API's totals, retries on 429/5xx\n- [ ] a manifest with the API snapshot name and the sha256 of each file\n- [ ] data checks: unique (bank, quarter) keys, missing values, failures matched to filings"},
+    {"title": "R package bankwarn: features, labels with a publication lag, the logistic model and its export", "milestone": "Sprint 1 - Data and the model in R", "labels": ["story", "area:r", "points:5"], "body": "As a credit-risk analyst, I want the model in a tested R package.\n\n**Acceptance criteria**\n- [ ] CAMELS-style features with four-quarter changes, defined once\n- [ ] a bank-quarter is positive if the bank failed within a year of its data becoming public; earlier failures are dropped\n- [ ] features clipped at training quantiles; coefficients and bounds exported with full precision\n- [ ] testthat tests, covr coverage, lintr, R CMD check"},
+    {"title": "Out-of-time evaluation against a one-ratio baseline", "milestone": "Sprint 1 - Data and the model in R", "labels": ["story", "area:r", "points:3"], "body": "As a supervisor, I want to know whether the model beats the obvious rule on years it never saw.\n\n**Acceptance criteria**\n- [ ] train on 2007-2009 report dates, test on 2011-2012, 2010 left out\n- [ ] AUC with a bank-level bootstrap interval, Brier score, a 100-bank watch list's recall and precision\n- [ ] the same for 'lowest equity ratio first'"},
+    {"title": "MySQL: schema, feature view and scoring procedure", "milestone": "Sprint 2 - The model in three SQL engines", "labels": ["story", "area:sql", "points:3"], "body": "**Acceptance criteria**\n- [ ] features as a view (self-join a year back, not LAG), scoring and watch-list procedures\n- [ ] integration tests on hand-worked cases"},
+    {"title": "SQL Server: schema, feature view and T-SQL procedures", "milestone": "Sprint 2 - The model in three SQL engines", "labels": ["story", "area:sql", "points:3"], "body": "**Acceptance criteria**\n- [ ] the same model in T-SQL; scoring in one transaction\n- [ ] integration tests on hand-worked cases"},
+    {"title": "Oracle: schema and the bank_risk PL/SQL package, tested with utPLSQL", "milestone": "Sprint 2 - The model in three SQL engines", "labels": ["story", "area:sql", "points:5"], "body": "**Acceptance criteria**\n- [ ] BINARY_DOUBLE arithmetic; a package with clip, logistic, score_quarter and watch_list\n- [ ] utPLSQL suite with a JUnit report"},
+    {"title": "Parity: every engine's scores equal R's, bank by bank, with load and scoring times", "milestone": "Sprint 2 - The model in three SQL engines", "labels": ["story", "area:sql", "points:3"], "body": "As a model-risk reviewer, I want proof the deployed SQL is the validated model.\n\n**Acceptance criteria**\n- [ ] the same banks in each test quarter; scores within 1e-9 of R's\n- [ ] load and scoring times per engine, labelled as one machine"},
+    {"title": "CI: R CMD check and all three engines on every push", "milestone": "Sprint 3 - CI and release", "labels": ["chore", "area:infra", "points:3"], "body": "**Acceptance criteria**\n- [ ] R CMD check with tests and coverage\n- [ ] the three databases as services, utPLSQL, integration tests, parity on a sample"},
+    {"title": "README, ADRs, model card and release v1.0.0", "milestone": "Sprint 3 - CI and release", "labels": ["chore", "area:docs", "points:2"], "body": "**Acceptance criteria**\n- [ ] README with the question, how to run it, measured results and limits\n- [ ] model card; ADRs for the label, the split and the parity design"},
+    {"title": "Load the watch list into Qlik Cloud", "milestone": "Backlog", "labels": ["story", "area:docs", "points:2", "blocked:account"], "body": "Needs a Qlik Cloud account (trial)."}
+  ]
+}

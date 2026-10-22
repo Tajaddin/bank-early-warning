@@ -1,0 +1,27 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+coverage.xml
+.coverage
+htmlcov/
+
+.env
+.env.*
+!.env.example
+
+# fetched FDIC data (`bew fetch`) and caches
+/data/
+/.cache/
+/.ci/
+
+# R CMD build / check output
+*.Rcheck/
+bankwarn_*.tar.gz
+.Rhistory
+.RData
+
+.idea/
+.vscode/
