@@ -1,0 +1,58 @@
+# The three databases and R, all local and free for development:
+#   python scripts/make_env.py && docker compose up -d --wait mysql sqlserver oracle
+#   docker compose run --rm r            the R analysis (fits the model, writes reports/r/)
+# Ports are on 127.0.0.1 only. SQL Server runs the Developer edition, which needs ACCEPT_EULA=Y (Microsoft's licence
+# for development and test use); Oracle Database 23ai Free runs under Oracle's free-use terms.
+name: bew
+
+services:
+  mysql:
+    image: mysql:9.7.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?run scripts/make_env.py}
+      MYSQL_DATABASE: bew
+      MYSQL_USER: bew
+      MYSQL_PASSWORD: ${BEW_MYSQL_PASSWORD:?run scripts/make_env.py}
+    command: ["--log-bin-trust-function-creators=1"]  # stored routines under binary logging
+    ports: ["127.0.0.1:33306:3306"]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2025-RTM-ubuntu-22.04
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${BEW_SQLSERVER_PASSWORD:?run scripts/make_env.py}
+    ports: ["127.0.0.1:31433:1433"]
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' -b -o /dev/null"]
+      interval: 5s
+      timeout: 10s
+      retries: 60
+
+  oracle:
+    image: gvenzl/oracle-free:23-slim-faststart
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_SYS_PASSWORD:?run scripts/make_env.py}
+      APP_USER: bew
+      APP_USER_PASSWORD: ${BEW_ORACLE_PASSWORD:?run scripts/make_env.py}
+    ports: ["127.0.0.1:31521:1521"]
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 10s
+      retries: 60
+
+  r:
+    profiles: [r]
+    build:
+      context: r
+    volumes:
+      - ./data/raw:/work/data/raw:ro
+      - ./reports/r:/work/reports/r
+    working_dir: /work
+    command: ["Rscript", "-e", "bankwarn::run_pipeline('data/raw', 'reports/r')"]
