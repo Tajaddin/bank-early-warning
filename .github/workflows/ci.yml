@@ -63,6 +63,57 @@ jobs:
       - name: coverage
         run: Rscript -e 'cov <- covr::package_coverage(); print(cov); cat(sprintf("total %.1f%%\n", covr::percent_coverage(cov)))'
 
+  analysis:
+    name: fetch FDIC data, check it, fit and evaluate in R
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with: { version: "${{ env.UV_VERSION }}", enable-cache: true }
+      - run: uv sync --locked --all-extras
+      - name: fetch (every page, counts equal to the API's) and check
+        run: uv run bew fetch > /dev/null && uv run bew check --out .ci/data-checks.json > /dev/null
+      - uses: r-lib/actions/setup-r@v2
+        with: { r-version: "4.6.1", use-public-rspm: true }
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with: { working-directory: r/bankwarn, extra-packages: "local::." }
+      - name: the R analysis on today's data
+        run: Rscript -e 'bankwarn::run_pipeline("data/raw", ".ci/r")' && cat .ci/r/report.json
+      - uses: actions/upload-artifact@v4
+        with: { name: analysis, path: "data/raw/\n.ci/", include-hidden-files: true, retention-days: 7 }
+
+  engine:
+    name: ${{ matrix.engine }} (tests in the engine, parity with R)
+    needs: analysis
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [mysql, sqlserver, oracle]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with: { version: "${{ env.UV_VERSION }}", enable-cache: true }
+      - run: uv sync --locked --all-extras
+      - uses: actions/download-artifact@v4
+        with: { name: analysis }
+      - name: the database
+        run: |
+          python3 scripts/make_env.py
+          docker compose up -d --wait --wait-timeout 600 ${{ matrix.engine }}
+      - name: utPLSQL suite (Oracle)
+        if: matrix.engine == 'oracle'
+        run: set -a && . ./.env && set +a && uv run python scripts/oracle_tests.py --out .ci/oracle-utplsql.xml
+      - name: the engine's SQL on hand-worked cases
+        run: set -a && . ./.env && set +a && uv run pytest -m integration -v -k ${{ matrix.engine }}
+      - name: every test bank-quarter scored by the engine, compared with R
+        run: |
+          set -a && . ./.env && set +a
+          uv run bew parity --engines ${{ matrix.engine }} --model .ci/r/model.json \
+            --reference .ci/r/test_scores_all.parquet --out .ci/parity-${{ matrix.engine }}.json
+      - if: failure()
+        run: docker compose logs --tail 200 ${{ matrix.engine }}
+
   security:
     name: gitleaks and pip-audit
     runs-on: ubuntu-24.04
