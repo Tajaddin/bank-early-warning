@@ -52,13 +52,10 @@ jobs:
         with:
           working-directory: r/bankwarn
           extra-packages: any::rcmdcheck, any::roxygen2, any::covr, any::lintr, local::.
-      - name: documentation is what roxygen generates
+      - name: the committed documentation is what roxygen generates
         run: |
           Rscript -e 'roxygen2::roxygenise()'
-          git status --porcelain -- NAMESPACE man
-          if [ -f NAMESPACE.committed ]; then git diff --exit-code -- NAMESPACE man; fi
-      - uses: actions/upload-artifact@v4
-        with: { name: roxygen-docs, path: "r/bankwarn/NAMESPACE\nr/bankwarn/man/", retention-days: 7 }
+          git diff --exit-code -- NAMESPACE man && test -z "$(git status --porcelain -- NAMESPACE man)"
       - name: lintr
         run: Rscript -e 'lints <- lintr::lint_package(); print(lints); quit(status = length(lints) > 0)'
       - uses: r-lib/actions/check-r-package@v2
