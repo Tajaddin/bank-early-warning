@@ -10,21 +10,23 @@ synthetic_panel <- function(banks = 400, seed = 11) {
     alive <- if (is.na(fail)) dates else dates[dates < fail - 30]
     stress <- if (is.na(fail)) 0 else pmax(0, 1 - as.numeric(fail - alive) / 900)
     n <- length(alive)
+    # every ratio is noisy and the effects are moderate: perfectly separable data would not converge
+    noise <- function(sd) stats::rnorm(n, 0, sd)
     data.frame(
       CERT = cert,
       REPDTE = alive,
       ASSET = 1e5 * exp(cumsum(stats::rnorm(n, 0.01, 0.02))),
       DEP = 8e4,
-      BRO = 4e3 * (1 + 3 * stress),
-      EQV = 11 - 7 * stress + stats::rnorm(n, 0, 1.2),
-      RBC1AAJ = 10 - 6 * stress + stats::rnorm(n, 0, 1),
-      NCLNLSR = 1 + 9 * stress + abs(stats::rnorm(n, 0, 1)),
-      LNATRESR = 1.5 + 2 * stress,
-      ELNATRY = 0.3 + 2 * stress,
-      ROA = 1 - 4 * stress + stats::rnorm(n, 0, 0.4),
-      NIMY = 3.6 - stress,
-      EEFFR = 65 + 40 * stress,
-      LNLSDEPR = 80 + stats::rnorm(n, 0, 5)
+      BRO = 4e3 * (1 + stress) * exp(noise(0.3)),
+      EQV = 11 - 4 * stress + noise(1.5),
+      RBC1AAJ = 10 - 3 * stress + noise(1.2),
+      NCLNLSR = 1 + 4 * stress + abs(noise(1.5)),
+      LNATRESR = 1.5 + stress + abs(noise(0.5)),
+      ELNATRY = 0.3 + stress + noise(0.4),
+      ROA = 1 - 2 * stress + noise(0.6),
+      NIMY = 3.6 - 0.5 * stress + noise(0.3),
+      EEFFR = 65 + 15 * stress + noise(8),
+      LNLSDEPR = 80 + noise(5)
     )
   })
   list(
