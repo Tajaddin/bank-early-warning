@@ -1,6 +1,6 @@
 Package: bankwarn
 Title: Bank-Failure Early Warning on FDIC Call Report Data
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: person("Tajaddin", "Gafarov", email = "gafarovtajaddin@gmail.com", role = c("aut", "cre"))
 Description: Builds CAMELS-style features from FDIC Call Report ratios, labels each
     bank-quarter by whether the bank failed within a year of the data becoming
