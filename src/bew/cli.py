@@ -51,3 +51,31 @@ def check_data(
     typer.echo(json.dumps(result, indent=2))
     if not all(result["passed"].values()):
         raise typer.Exit(1)
+
+
+@app.command()
+def parity(
+    engines: Annotated[str, typer.Option(help="comma-separated: mysql,sqlserver,oracle")] = "mysql,sqlserver,oracle",
+    raw: Annotated[Path, typer.Option()] = RAW,
+    model: Annotated[Path, typer.Option(help="model.json from the R pipeline")] = Path("reports/r/model.json"),
+    reference: Annotated[Path, typer.Option(help="R's scores for every test bank-quarter")] = Path(
+        "reports/r/test_scores_all.parquet"
+    ),
+    out: Annotated[Path, typer.Option()] = Path("reports/parity.json"),
+) -> None:
+    """Score the test quarters in each engine and compare with R."""
+    from bew.config import settings
+    from bew.parity import run, write
+
+    report = run([e.strip() for e in engines.split(",") if e.strip()], raw, model, reference, settings())
+    write(report, out)
+    summary = {
+        k: {
+            f: v[f]
+            for f in ("banks_scored", "max_abs_diff_vs_r", "equal_to_r", "load_financials_s", "score_all_quarters_s")
+        }
+        for k, v in report["engines"].items()
+    }
+    typer.echo(json.dumps(summary, indent=2))
+    if not all(v["equal_to_r"] for v in report["engines"].values()):
+        raise typer.Exit(1)

@@ -1,0 +1,246 @@
+{
+  "what": "the R model scored by each engine's own SQL, compared with R's scores, bank by bank",
+  "tolerance": 1e-09,
+  "machine": {
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "os": "Windows-11"
+  },
+  "rows": {
+    "financials": 229377,
+    "failures": 3629,
+    "test_quarters": 8
+  },
+  "engines": {
+    "mysql": {
+      "install_s": 0.52,
+      "load_financials_s": 8.01,
+      "load_failures_s": 0.09,
+      "score_all_quarters_s": 1.01,
+      "banks_scored": 58661,
+      "missing_vs_r": 0,
+      "extra_vs_r": 0,
+      "max_abs_diff_vs_r": 7.771561172376096e-16,
+      "equal_to_r": true,
+      "quarters": {
+        "2011-03-31": {
+          "scored": 7565,
+          "seconds": 0.149,
+          "banks": 7565,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 6.106226635438361e-16
+        },
+        "2011-06-30": {
+          "scored": 7501,
+          "seconds": 0.118,
+          "banks": 7501,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 6.106226635438361e-16
+        },
+        "2011-09-30": {
+          "scored": 7428,
+          "seconds": 0.148,
+          "banks": 7428,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 7.216449660063518e-16
+        },
+        "2011-12-31": {
+          "scored": 7354,
+          "seconds": 0.154,
+          "banks": 7354,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 6.106226635438361e-16
+        },
+        "2012-03-31": {
+          "scored": 7307,
+          "seconds": 0.106,
+          "banks": 7307,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 7.771561172376096e-16
+        },
+        "2012-06-30": {
+          "scored": 7245,
+          "seconds": 0.133,
+          "banks": 7245,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 3.608224830031759e-16
+        },
+        "2012-09-30": {
+          "scored": 7180,
+          "seconds": 0.105,
+          "banks": 7180,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 4.996003610813204e-16
+        },
+        "2012-12-31": {
+          "scored": 7081,
+          "seconds": 0.1,
+          "banks": 7081,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 5.551115123125783e-16
+        }
+      }
+    },
+    "sqlserver": {
+      "install_s": 0.44,
+      "load_financials_s": 11.31,
+      "load_failures_s": 0.09,
+      "score_all_quarters_s": 1.56,
+      "banks_scored": 58661,
+      "missing_vs_r": 0,
+      "extra_vs_r": 0,
+      "max_abs_diff_vs_r": 7.771561172376096e-16,
+      "equal_to_r": true,
+      "quarters": {
+        "2011-03-31": {
+          "scored": 7565,
+          "seconds": 0.512,
+          "banks": 7565,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 6.106226635438361e-16
+        },
+        "2011-06-30": {
+          "scored": 7501,
+          "seconds": 0.252,
+          "banks": 7501,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 6.106226635438361e-16
+        },
+        "2011-09-30": {
+          "scored": 7428,
+          "seconds": 0.178,
+          "banks": 7428,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 7.216449660063518e-16
+        },
+        "2011-12-31": {
+          "scored": 7354,
+          "seconds": 0.148,
+          "banks": 7354,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 6.106226635438361e-16
+        },
+        "2012-03-31": {
+          "scored": 7307,
+          "seconds": 0.125,
+          "banks": 7307,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 7.771561172376096e-16
+        },
+        "2012-06-30": {
+          "scored": 7245,
+          "seconds": 0.112,
+          "banks": 7245,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 3.608224830031759e-16
+        },
+        "2012-09-30": {
+          "scored": 7180,
+          "seconds": 0.111,
+          "banks": 7180,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 4.996003610813204e-16
+        },
+        "2012-12-31": {
+          "scored": 7081,
+          "seconds": 0.118,
+          "banks": 7081,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 5.551115123125783e-16
+        }
+      }
+    },
+    "oracle": {
+      "install_s": 0.23,
+      "load_financials_s": 5.78,
+      "load_failures_s": 0.03,
+      "score_all_quarters_s": 0.87,
+      "banks_scored": 58661,
+      "missing_vs_r": 0,
+      "extra_vs_r": 0,
+      "max_abs_diff_vs_r": 7.771561172376096e-16,
+      "equal_to_r": true,
+      "quarters": {
+        "2011-03-31": {
+          "scored": 7565,
+          "seconds": 0.542,
+          "banks": 7565,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 6.106226635438361e-16
+        },
+        "2011-06-30": {
+          "scored": 7501,
+          "seconds": 0.043,
+          "banks": 7501,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 6.106226635438361e-16
+        },
+        "2011-09-30": {
+          "scored": 7428,
+          "seconds": 0.04,
+          "banks": 7428,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 7.216449660063518e-16
+        },
+        "2011-12-31": {
+          "scored": 7354,
+          "seconds": 0.041,
+          "banks": 7354,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 6.106226635438361e-16
+        },
+        "2012-03-31": {
+          "scored": 7307,
+          "seconds": 0.045,
+          "banks": 7307,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 7.771561172376096e-16
+        },
+        "2012-06-30": {
+          "scored": 7245,
+          "seconds": 0.04,
+          "banks": 7245,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 3.608224830031759e-16
+        },
+        "2012-09-30": {
+          "scored": 7180,
+          "seconds": 0.038,
+          "banks": 7180,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 4.996003610813204e-16
+        },
+        "2012-12-31": {
+          "scored": 7081,
+          "seconds": 0.081,
+          "banks": 7081,
+          "missing": 0,
+          "extra": 0,
+          "max_abs_diff": 5.551115123125783e-16
+        }
+      }
+    }
+  }
+}
