@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<testsuites tests="6" disabled="0" errors="0" failures="0" name="" time=".297758" >
+<testsuite tests="6" id="1" package="test_bank_risk"  disabled="0" errors="0" failures="0" name="bank_risk: scoring the early-warning model in PL/SQL" time=".29734" >
+<testcase classname="test_bank_risk" assertions="3" name="clip keeps a value inside its bounds" time=".052303" >
+<system-out/>
+<system-err/>
+</testcase>
+<testcase classname="test_bank_risk" assertions="2" name="the logistic of 0 is one half, and of -z is one minus that of z" time=".014702" >
+<system-out/>
+<system-err/>
+</testcase>
+<testcase classname="test_bank_risk" assertions="2" name="a quarter scores every bank with a filing a year earlier, and no other" time=".208296" >
+<system-out/>
+<system-err/>
+</testcase>
+<testcase classname="test_bank_risk" assertions="2" name="a score is the clipped dot product through the logistic function, worked by hand" time=".005627" >
+<system-out/>
+<system-err/>
+</testcase>
+<testcase classname="test_bank_risk" assertions="2" name="scoring a quarter again replaces its scores" time=".005142" >
+<system-out/>
+<system-err/>
+</testcase>
+<testcase classname="test_bank_risk" assertions="2" name="the watch list puts the highest score first and stops at k" time=".010445" >
+<system-out/>
+<system-err/>
+</testcase>
+<system-out/>
+<system-err/>
+</testsuite>
+</testsuites>
