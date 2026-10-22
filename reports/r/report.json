@@ -1,0 +1,50 @@
+{
+  "data": {
+    "bank_quarters": 190470,
+    "train": {
+      "from": "2007-12-31",
+      "to": "2009-12-31",
+      "rows": 73492,
+      "failed_rows": 1191,
+      "failed_banks": 356
+    },
+    "test": {
+      "from": "2011-03-31",
+      "to": "2012-12-31",
+      "rows": 58443,
+      "failed_rows": 352,
+      "failed_banks": 128
+    }
+  },
+  "model": {
+    "auc": 0.991208,
+    "auc_95ci": [0.98897, 0.992892],
+    "brier": 0.004497,
+    "watch_list_recall": 0.653409,
+    "watch_list_precision": 0.2875
+  },
+  "baseline_lowest_equity": {
+    "auc": 0.990611,
+    "auc_95ci": [0.9858, 0.994195],
+    "watch_list_recall": 0.778409,
+    "watch_list_precision": 0.3425
+  },
+  "watch_list_k": 100,
+  "coefficients": {
+    "eqv": -0.123467,
+    "lev": -0.454563,
+    "ncl": 0.166336,
+    "reserve": 0.128542,
+    "prov": -0.121535,
+    "roa": -0.215458,
+    "nim": -0.085028,
+    "eff": 0.003118,
+    "ltd": 0.01892,
+    "brokered": 0.021607,
+    "log_assets": 0.171401,
+    "d_roa": -0.152846,
+    "d_ncl": 0.055708,
+    "growth": 0.594467
+  },
+  "r_version": "R version 4.6.1 (2026-06-24)"
+}
