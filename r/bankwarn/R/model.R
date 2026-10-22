@@ -87,6 +87,7 @@ export_model <- function(model, path) {
     upper = unname(model$upper)
   )
   doc <- list(intercept = model$intercept, features = rows, n_train = model$n_train, n_failed = model$n_failed)
-  writeLines(jsonlite::toJSON(doc, digits = NA, auto_unbox = TRUE, pretty = TRUE), path, useBytes = TRUE)
+  # I(17): 17 significant digits round-trip any double; digits = NA writes 15 and loses the last bits
+  writeLines(jsonlite::toJSON(doc, digits = I(17), auto_unbox = TRUE, pretty = TRUE), path, useBytes = TRUE)
   invisible(path)
 }
