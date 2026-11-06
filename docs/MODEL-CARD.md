@@ -3,8 +3,9 @@
 ## What it is
 
 A logistic regression that scores each US insured bank, each quarter, for the chance it fails within a year of its
-Call Report becoming public. Fitted in R (`r/bankwarn`), exported as data (`reports/r/model.json`), and scored by
-MySQL, SQL Server and Oracle with their own SQL, each proven equal to R (`reports/parity.json`).
+Call Report becoming public. Out of time the scores rank banks well but overstate that chance
+([calibration](#calibration-test-quarters)). Fitted in R (`r/bankwarn`), exported as data (`reports/r/model.json`),
+and scored by MySQL, SQL Server and Oracle with their own SQL, each proven equal to R (`reports/parity.json`).
 
 ## Intended use
 
@@ -52,8 +53,8 @@ The same 58,443 test bank-quarters, grouped by score (`reports/calibration.json`
 
 **The scores overstate the chance of failure in every band**, 1.7 times overall. A logistic fit reproduces its
 training failure rate, here 1.62% (1,191 of 73,492 bank-quarters in 2007-2009); 2011-2012 had 0.60%. The order
-holds (the AUC above), so read a score as a rank within its quarter, not as a probability. The Brier score mixes
-ranking and calibration; this table separates them.
+holds (the AUC above), so read a score as a rank within its quarter, not as a calibrated probability. The Brier
+score mixes ranking and calibration; this table separates them.
 
 ## Limits
 

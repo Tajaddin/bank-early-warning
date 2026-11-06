@@ -45,7 +45,8 @@ those years. That is reported as found: the design was fixed before the test yea
 
 **Calibration** (`reports/calibration.json`): over the test quarters the scores add up to 602.6 expected failures
 against 352 observed, too high in every score band. The model was fitted on crisis years, when 1.62% of
-bank-quarters failed; 0.60% did in the test years. The scores rank banks; they are not probabilities
+bank-quarters were followed by a failure within a year; in the test years 0.60% were, and the scores average 1.03%.
+Read them as a rank within the quarter, not as calibrated probabilities
 ([model card](docs/MODEL-CARD.md#calibration-test-quarters)).
 
 **Tests**: R: 50 testthat expectations, 99.4% coverage, R CMD check clean. Oracle: 6 utPLSQL tests. All three
