@@ -54,6 +54,20 @@ def check_data(
 
 
 @app.command()
+def calibration(
+    scores: Annotated[Path, typer.Option(help="R's test scores with labels")] = Path("reports/r/test_scores.parquet"),
+    out: Annotated[Path, typer.Option()] = Path("reports/calibration.json"),
+) -> None:
+    """Expected against observed failures on the test quarters, by risk band."""
+    from bew.calibration import reliability
+
+    result = reliability(scores)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8", newline="\n")
+    typer.echo(json.dumps(result, indent=2))
+
+
+@app.command()
 def parity(
     engines: Annotated[str, typer.Option(help="comma-separated: mysql,sqlserver,oracle")] = "mysql,sqlserver,oracle",
     raw: Annotated[Path, typer.Option()] = RAW,

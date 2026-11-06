@@ -1,5 +1,5 @@
 .PHONY: help install env lint format typecheck test check secret-scan fetch up down r-image r-test analysis \
-        oracle-tests test-integration parity backlog
+        calibration oracle-tests test-integration parity backlog
 
 help:               ## this list
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/'
@@ -44,6 +44,9 @@ r-test: r-image     ## testthat inside the R image
 
 analysis: r-image   ## fit and evaluate in R: reports/r/ (model.json, scores, report.json)
 	docker compose run --rm r
+
+calibration:        ## expected vs observed failures on the test quarters (reports/calibration.json)
+	uv run bew calibration
 
 oracle-tests:       ## utPLSQL suite in Oracle (installs utPLSQL once)
 	uv run python scripts/oracle_tests.py

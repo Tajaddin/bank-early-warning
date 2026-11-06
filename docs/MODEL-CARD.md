@@ -36,6 +36,25 @@ Trained on report dates 2007-12-31 to 2009-12-31 (73,492 bank-quarters, 356 fail
 **The model does not beat the one-ratio rule.** It ties on AUC and, on the watch list a supervisor would actually
 use, the rule catches more failing banks. Capital explains most of who failed in 2011-2012.
 
+## Calibration (test quarters)
+
+The same 58,443 test bank-quarters, grouped by score (`reports/calibration.json`, from `bew calibration` on
+`reports/r/test_scores.parquet`). Expected failures are the scores summed.
+
+| Score | Bank-quarters | Expected failures | Failed | Mean score | Failure rate |
+|---|---|---|---|---|---|
+| under 0.1% | 25,894 | 9.6 | 0 | 0.04% | 0% |
+| 0.1% to 1% | 27,405 | 80.4 | 0 | 0.29% | 0% |
+| 1% to 10% | 3,744 | 113.9 | 57 | 3.0% | 1.5% |
+| 10% to 50% | 1,196 | 267.7 | 190 | 22.4% | 15.9% |
+| 50% and over | 204 | 131.0 | 105 | 64.2% | 51.5% |
+| All | 58,443 | 602.6 | 352 | 1.03% | 0.60% |
+
+**The scores overstate the chance of failure in every band**, 1.7 times overall. A logistic fit reproduces its
+training failure rate, here 1.62% (1,191 of 73,492 bank-quarters in 2007-2009); 2011-2012 had 0.60%. The order
+holds (the AUC above), so read a score as a rank within its quarter, not as a probability. The Brier score mixes
+ranking and calibration; this table separates them.
+
 ## Limits
 
 - Crisis-era evidence only: after 2014, failures are single digits a year, too few to test on.
@@ -49,3 +68,6 @@ use, the rule catches more failing banks. Capital explains most of who failed in
 
 A sparse model (lasso) or capital plus asset quality only, selected inside the training years, then the same
 out-of-time test. Recorded in the Sprint 1 retro as new work, not done here.
+
+To read scores as probabilities, refit the intercept on 2010, which neither training nor testing uses. That shifts
+every score the same way on the log-odds scale, so the AUC and the watch lists would not change. Not done here.
