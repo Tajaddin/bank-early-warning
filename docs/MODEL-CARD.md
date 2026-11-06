@@ -69,5 +69,11 @@ ranking and calibration; this table separates them.
 A sparse model (lasso) or capital plus asset quality only, selected inside the training years, then the same
 out-of-time test. Recorded in the Sprint 1 retro as new work, not done here.
 
-To read scores as probabilities, refit the intercept on 2010, which neither training nor testing uses. That shifts
-every score the same way on the log-odds scale, so the AUC and the watch lists would not change. Not done here.
+To read scores as probabilities, refit the intercept on outcomes known before the test quarters. 2010 is not such a
+set, although neither training nor testing uses it: its labels run to 2012-02-29, through the outcome windows of the
+2011 test quarters, so a refit on it would learn part of the test period's failure rate and the table above would no
+longer be out of time. It could set the intercept only for a test that starts after its labels end. Holding out the
+last training quarters instead would set it from 2009, the crisis peak. The version that stays out of time refits
+the intercept for each test quarter on the latest quarters whose labels ended before that quarter's report date.
+Any intercept shift moves every score the same way on the log-odds scale, so the AUC and the watch lists would not
+change. Not done here.
