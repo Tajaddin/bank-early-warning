@@ -44,7 +44,7 @@ The model ties the one-ratio rule on AUC and loses on the watch list. Capital al
 those years. That is reported as found: the design was fixed before the test years were scored.
 
 **Tests**: R: 50 testthat expectations, 99.4% coverage, R CMD check clean. Oracle: 6 utPLSQL tests. All three
-engines: 12 integration tests on hand-worked cases. Python: 17 unit tests. CI fetches fresh data, reruns the R
+engines: 12 integration tests on hand-worked cases. Python: 19 unit tests. CI fetches fresh data, reruns the R
 analysis and checks parity in each engine on every push.
 
 ## Run it

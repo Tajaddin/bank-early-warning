@@ -58,3 +58,25 @@ def test_a_short_read_is_refused() -> None:
     respx.get(f"{fdic.API}/failures").mock(return_value=httpx.Response(200, json={"meta": {"total": 5}, "data": []}))
     with httpx.Client() as client, pytest.raises(RuntimeError, match="got 0 rows"):
         fdic.fetch(client, "failures", {}, fdic.FAILURE_FIELDS)
+
+
+@respx.mock
+def test_a_dropped_connection_is_retried(monkeypatch: pytest.MonkeyPatch) -> None:
+    waits: list[float] = []
+    monkeypatch.setattr(fdic.time, "sleep", waits.append)
+    ok = httpx.Response(200, json={"meta": {"total": 0}, "data": []})
+    route = respx.get(f"{fdic.API}/failures").mock(side_effect=[httpx.ConnectError("reset"), ok])
+    with httpx.Client() as client:
+        table, info = fdic.fetch(client, "failures", {}, fdic.FAILURE_FIELDS)
+    assert route.call_count == 2 and waits == [1]
+    assert table.num_rows == 0 and info["rows"] == 0
+
+
+@respx.mock
+def test_a_connection_that_keeps_failing_is_raised_after_five_attempts(monkeypatch: pytest.MonkeyPatch) -> None:
+    waits: list[float] = []
+    monkeypatch.setattr(fdic.time, "sleep", waits.append)
+    route = respx.get(f"{fdic.API}/failures").mock(side_effect=httpx.ReadTimeout("slow"))
+    with httpx.Client() as client, pytest.raises(httpx.ReadTimeout):
+        fdic.fetch(client, "failures", {}, fdic.FAILURE_FIELDS)
+    assert route.call_count == 5 and waits == [1, 2, 4, 8]

@@ -93,13 +93,18 @@ def _convert(value: Any, kind: pa.DataType) -> Any:
 def pages(
     client: httpx.Client, endpoint: str, params: dict[str, Any]
 ) -> Iterator[tuple[dict[str, Any], list[dict[str, Any]]]]:
-    """Every page of a query, with retries on 429 and 5xx; yields (meta, rows)."""
+    """Every page of a query, with retries on dropped connections, timeouts, 429 and 5xx; yields (meta, rows)."""
     offset = 0
     while True:
         for attempt in range(5):
-            r = client.get(f"{API}/{endpoint}", params={**params, "limit": PAGE, "offset": offset})
-            if r.status_code < 500 and r.status_code != 429:
-                break
+            try:
+                r = client.get(f"{API}/{endpoint}", params={**params, "limit": PAGE, "offset": offset})
+            except httpx.TransportError:
+                if attempt == 4:
+                    raise
+            else:
+                if r.status_code < 500 and r.status_code != 429:
+                    break
             time.sleep(2**attempt)
         r.raise_for_status()
         body = r.json()
