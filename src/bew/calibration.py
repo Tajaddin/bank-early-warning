@@ -1,7 +1,7 @@
 """Calibration of the R model's test-quarter scores: does a predicted probability match the failure rate observed?
 
-Failures are rare (0.6% of test bank-quarters), so the scores are grouped into fixed risk bands, not equal-count
-bins, which would leave almost every bin without a failure."""
+Failures are rare, so the scores are grouped into fixed risk bands, not equal-count bins, which would leave almost
+every bin without a failure."""
 
 from __future__ import annotations
 

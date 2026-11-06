@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import pyarrow as pa
@@ -5,6 +6,8 @@ import pyarrow.parquet as pq
 import pytest
 
 from bew.calibration import reliability
+
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_reliability_by_band(tmp_path: Path) -> None:
@@ -35,3 +38,10 @@ def test_reliability_by_band(tmp_path: Path) -> None:
         "failure_rate": pytest.approx(0.5),
     }
     assert bands[(0.5, 1.0)]["failed"] == 2 and bands[(0.5, 1.0)]["mean_score"] == pytest.approx(0.7)
+
+
+def test_committed_report_matches_committed_scores(monkeypatch: pytest.MonkeyPatch) -> None:
+    # the README and the model card quote reports/calibration.json; a new R run must regenerate it
+    monkeypatch.chdir(ROOT)
+    committed = json.loads(Path("reports/calibration.json").read_text(encoding="utf-8"))
+    assert reliability(Path("reports/r/test_scores.parquet")) == committed

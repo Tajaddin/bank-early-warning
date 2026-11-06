@@ -50,7 +50,7 @@ Read them as a rank within the quarter, not as calibrated probabilities
 ([model card](docs/MODEL-CARD.md#calibration-test-quarters)).
 
 **Tests**: R: 50 testthat expectations, 99.4% coverage, R CMD check clean. Oracle: 6 utPLSQL tests. All three
-engines: 12 integration tests on hand-worked cases. Python: 20 unit tests. CI fetches fresh data, reruns the R
+engines: 12 integration tests on hand-worked cases. Python: 21 unit tests. CI fetches fresh data, reruns the R
 analysis and checks parity in each engine on every push.
 
 ## Run it
