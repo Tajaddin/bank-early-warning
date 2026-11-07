@@ -43,8 +43,14 @@ none missing and none extra; the largest difference from R's probability was **7
 The model ties the one-ratio rule on AUC and loses on the watch list. Capital alone explains most failures of
 those years. That is reported as found: the design was fixed before the test years were scored.
 
+**Calibration** (`reports/calibration.json`): over the test quarters the scores add up to 602.6 expected failures
+against 352 observed, too high in every score band. The model was fitted on crisis years, when 1.62% of
+bank-quarters were followed by a failure within a year; in the test years 0.60% were, and the scores average 1.03%.
+Read them as a rank within the quarter, not as calibrated probabilities
+([model card](docs/MODEL-CARD.md#calibration-test-quarters)).
+
 **Tests**: R: 50 testthat expectations, 99.4% coverage, R CMD check clean. Oracle: 6 utPLSQL tests. All three
-engines: 12 integration tests on hand-worked cases. Python: 17 unit tests. CI fetches fresh data, reruns the R
+engines: 12 integration tests on hand-worked cases. Python: 21 unit tests. CI fetches fresh data, reruns the R
 analysis and checks parity in each engine on every push.
 
 ## Run it
@@ -56,6 +62,7 @@ uv sync --all-extras
 python scripts/make_env.py                         # .env with generated local passwords
 uv run bew fetch && uv run bew check               # FDIC data, about 2 minutes
 docker compose run --rm r                          # the R analysis -> reports/r/
+uv run bew calibration                             # expected vs observed failures -> reports/calibration.json
 docker compose up -d --wait mysql sqlserver oracle
 uv run python scripts/oracle_tests.py              # utPLSQL (installs it once)
 uv run pytest -m integration                       # the SQL on hand-worked cases
@@ -79,7 +86,7 @@ R is not needed on the host; it runs in the `rocker/r-ver:4.6.1` image.
 r/bankwarn/      the R package (features, labels, model, evaluation, pipeline) and its tests
 sql/<engine>/    schema, features and scoring for MySQL, SQL Server, Oracle (+ utPLSQL tests)
 src/bew/         fetch and checks, the engines, parity
-reports/         data checks, the R analysis, parity, the utPLSQL report
+reports/         data checks, the R analysis, calibration, parity, the utPLSQL report
 docs/            ADRs, model card, sprint retros
 ```
 

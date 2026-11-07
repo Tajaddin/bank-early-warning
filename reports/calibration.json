@@ -1,0 +1,67 @@
+{
+  "scores": "reports/r/test_scores.parquet",
+  "overall": {
+    "rows": 58443,
+    "failed": 352,
+    "expected_failures": 602.576424,
+    "mean_score": 0.01031,
+    "failure_rate": 0.006023
+  },
+  "bands": [
+    {
+      "band": [
+        0.0,
+        0.001
+      ],
+      "rows": 25894,
+      "failed": 0,
+      "expected_failures": 9.605779,
+      "mean_score": 0.000371,
+      "failure_rate": 0.0
+    },
+    {
+      "band": [
+        0.001,
+        0.01
+      ],
+      "rows": 27405,
+      "failed": 0,
+      "expected_failures": 80.399979,
+      "mean_score": 0.002934,
+      "failure_rate": 0.0
+    },
+    {
+      "band": [
+        0.01,
+        0.1
+      ],
+      "rows": 3744,
+      "failed": 57,
+      "expected_failures": 113.852579,
+      "mean_score": 0.030409,
+      "failure_rate": 0.015224
+    },
+    {
+      "band": [
+        0.1,
+        0.5
+      ],
+      "rows": 1196,
+      "failed": 190,
+      "expected_failures": 267.703325,
+      "mean_score": 0.223832,
+      "failure_rate": 0.158863
+    },
+    {
+      "band": [
+        0.5,
+        1.0
+      ],
+      "rows": 204,
+      "failed": 105,
+      "expected_failures": 131.014762,
+      "mean_score": 0.642229,
+      "failure_rate": 0.514706
+    }
+  ]
+}
